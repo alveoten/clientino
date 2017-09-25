@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
+#include "libraries/Command/Command.h"
 #include "config.h"
 
 ESP8266WiFiMulti wifiMulti;
@@ -38,7 +39,7 @@ void loop()
 {
 
 	if( Serial.available() > 0){
-		String command = Serial.readString();
+		String from_serial = Serial.readString();
 		HTTPClient http;
 
 		if(WiFi.status() != WL_CONNECTED){
@@ -49,8 +50,35 @@ void loop()
 			}
 		}
 
-		http.begin(command);
-		int httpCode = http.GET();
+		Command command( (char*) from_serial.c_str() );
+		if(command.getStatus() == CS_KO){
+			Serial.print("invalid command: ");
+			Serial.println(from_serial);
+			return;
+		}
+
+		int httpCode;
+
+		if( strcmp("GET", command.getMethod() ) == 0  ){
+			String destination(command.getUrl());
+			destination += '?';
+			destination + command.getQuery();
+
+			http.begin(destination);
+			httpCode = http.GET();
+		}
+		else if( strcmp("POST", command.getMethod() ) == 0  ){
+			String destination(command.getUrl());
+			String query(command.getQuery());
+			http.begin(destination);
+			httpCode = http.POST(query);
+		}
+		else{
+			Serial.print("invalid method: ");
+			Serial.println(command.getMethod());
+			return;
+		}
+
 
 		// httpCode will be negative on error
 		if(httpCode > 0) {
