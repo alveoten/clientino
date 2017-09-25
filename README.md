@@ -30,3 +30,7 @@ In GET method is the query string
 *SSID* is the name of ssid
 *PASSWORD* is the password
 
+	//TODO
+- ADDSID command 
+- a simple Arduino API library 
+
