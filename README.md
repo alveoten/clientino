@@ -21,7 +21,11 @@ The url to connect. You must provide http or https (not yet supported).
 Without query string.
 
 *PAYLOAD*
-In GET method is the query string 
+In POST method is the string with key=values string
+
+Examples:
+GET|http://test.example.com?value=1|
+POST|http://test.example.com|value=1&value2=2 
 
 		ADD AN SSID //todo
 *ADDSSID|SSID|PASSWORD*
@@ -29,6 +33,9 @@ In GET method is the query string
 *ADDSSID* is the command
 *SSID* is the name of ssid
 *PASSWORD* is the password
+
+Examples:
+ADDSSID|myssidname|thisisthepassword
 
 	//TODO
 - ADDSID command 
