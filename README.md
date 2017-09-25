@@ -32,5 +32,6 @@ In GET method is the query string
 
 	//TODO
 - ADDSID command 
-- a simple Arduino API library 
+- a simple Arduino API library
+- HTTPS request 
 
