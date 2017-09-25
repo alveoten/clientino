@@ -15,16 +15,16 @@ void setup()
 	  Serial.begin(9600);
 	  delay(10);
 
+	  for(unsigned int i=0; i<(sizeof(ssidList)/sizeof(Ssid)); i++ ){
+		  wifiMulti.addAP(ssidList[i].ssid, ssidList[i].password);
+	  }
+
 	  //define a config.h to set the multi ssid connection
 	  //see config.example.h
 	  Serial.println("Connecting ...");
 	  while (wifiMulti.run() != WL_CONNECTED) { // Wait for the Wi-Fi to connect: scan for Wi-Fi networks, and connect to the strongest of the networks above
 		  delay(500);
 		  Serial.print('.');
-	  }
-
-	  for(unsigned int i=0; i<(sizeof(ssidList)/sizeof(Ssid)); i++ ){
-		  wifiMulti.addAP(ssidList[i].ssid, ssidList[i].password);
 	  }
 
 	  Serial.print("Connected to ");
@@ -78,6 +78,16 @@ void loop()
 			Serial.println(command.getMethod());
 			return;
 		}
+
+		Serial.print("method: ");
+		Serial.println(command.getMethod());
+
+		Serial.print("url: ");
+		Serial.println(command.getUrl());
+
+		Serial.print("query: ");
+		Serial.println(command.getQuery());
+
 
 
 		// httpCode will be negative on error
