@@ -22,7 +22,7 @@ void loop()
 	if( Serial.available() > 0){
 		String from_serial = Serial.readString();
 
-		Command command( (char *) from_serial.c_str(), numberOfSSID );
+		Command command( (char *) from_serial.c_str(), & numberOfSSID );
 		Serial.println(command.getReturnMessage());
 
 	}

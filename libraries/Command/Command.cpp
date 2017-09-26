@@ -6,6 +6,7 @@
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 
+Ssid SSIDlist[MAX_NUM_SSID];
 
 String Command::GET(char** parameters) {
 	if(numOfParams < 2){
@@ -65,15 +66,15 @@ String Command::addSSID(char** parameters) {
 		return ret;
 	}
 
-	if(numberOfSSID >= MAX_NUM_SSID){
+	if( *numberOfSSID >= MAX_NUM_SSID){
 		String ret = "KO|max number of SSID reached: ";
 		ret += MAX_NUM_SSID;
 		return ret;
 	}
 
-	SSIDlist[numberOfSSID].setSsid(parameters[1]);
-	SSIDlist[numberOfSSID].setPassword(parameters[2]);
-	numberOfSSID++;
+	SSIDlist[*numberOfSSID].setSsid((String) parameters[1]);
+	SSIDlist[*numberOfSSID].setPassword((String) parameters[2]);
+	(*numberOfSSID)++;
 
 	wifiMulti.addAP(parameters[1],parameters[2]);
 
@@ -93,9 +94,10 @@ String Command::getConnectedSSID() {
 
 String Command::getSSIDList() {
 	String ret = "";
-	for(uint8_t i = 0; i<numberOfSSID; i++){
+	Serial.println((*numberOfSSID));
+	for(uint8_t i = 0; i<(*numberOfSSID); i++){
 		ret += SSIDlist[i].getSsid();
-		if(i != (numberOfSSID-1) ){
+		if(i != ((*numberOfSSID)-1) ){
 			ret += "|";
 		}
 	}
@@ -106,16 +108,22 @@ char Command::getStatus() const {
 	return status;
 }
 
-Command::Command(char* c, uint8_t n) {
+Command::Command(char* c, uint8_t * numSSID) {
 	command = c;
 	numOfParams = countParameters(command);
-	numberOfSSID = n;
+	numberOfSSID = numSSID;
 
 	char * parameters[numOfParams];
-	parameters[0] = strtok(command, "|");
+	parameters[0] = strtok(command, "|\n");
 
 	for(uint8_t i = 1; i < numOfParams; i++){
 		parameters[i] = strtok(NULL, "|");
+	}
+
+	for(uint8_t i = 0; i<strlen(parameters[0]); i++){
+		if(parameters[0][i] == ' ' || parameters[0][i] == '\r' || parameters[0][i] == '\n'){
+			parameters[0][i] = '\0';
+		}
 	}
 
 	if(strcmp(parameters[0],"GET") == 0){
@@ -131,7 +139,7 @@ Command::Command(char* c, uint8_t n) {
 		returnMessage = getConnectedSSID();
 	}
 	else if(strcmp(parameters[0],"GETSSIDLIST") == 0){
-		returnMessage = getConnectedSSID();
+		returnMessage = getSSIDList();
 	}
 	else{
 		returnMessage = "KO|invalid command: ";
@@ -152,7 +160,7 @@ uint8_t Command::countParameters(char * command) {
 }
 
 String Command::returnHTTPResponse(char ** parameters, uint8_t method) {
-	if(numberOfSSID == 0){
+	if( *numberOfSSID == 0){
 		return "you must specify a SSID before try to do an HTTP request";
 	}
 
@@ -194,7 +202,8 @@ String Command::returnHTTPResponse(char ** parameters, uint8_t method) {
 	if(httpCode > 0) {
 		// file found at server
 		response = "[HTTP-OK:";
-		response += httpCode+'\n';
+		response += httpCode;
+		response += "]\r\n";
 		response += http.getString();
 	} else {
 		response = "[HTTP-ERROR] ";

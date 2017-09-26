@@ -27,9 +27,9 @@ class Command{
 	String returnMessage;
 	char * command;
 	ESP8266WiFiMulti wifiMulti;
-	Ssid SSIDlist[MAX_NUM_SSID];
 
-	uint8_t numOfParams, numberOfSSID;
+	uint8_t numOfParams;
+	uint8_t * numberOfSSID;
 
 	uint8_t countParameters(char *);
 
@@ -92,7 +92,7 @@ class Command{
 	 */
 	String getSSIDList();
 public:
-	Command(char * command, uint8 numberOfSSID);
+	Command(char * command, uint8_t * numSSID);
 	char getStatus() const;
 	const String& getReturnMessage() const;
 };
