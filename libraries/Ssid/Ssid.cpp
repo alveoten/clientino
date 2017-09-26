@@ -1,9 +1,20 @@
 #include "Ssid.h"
-#include "string.h"
+#include "WString.h"
 
-Ssid::Ssid(const char* s,const char* p) {
-	strcpy(ssid,s);
-	strcpy(password, p);
+const String& Ssid::getPassword() const {
+	return password;
+}
+
+void Ssid::setPassword(const String& password) {
+	this->password = password;
+}
+
+const String& Ssid::getSsid() const {
+	return ssid;
+}
+
+void Ssid::setSsid(const String& ssid) {
+	this->ssid = ssid;
 }
 /*
  * Ssid.cpp

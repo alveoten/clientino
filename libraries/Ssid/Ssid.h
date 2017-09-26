@@ -8,12 +8,18 @@
 #ifndef LIBRARIES_SSID_SSID_H_
 #define LIBRARIES_SSID_SSID_H_
 
-class Ssid{
+#include "WString.h"
 
+class Ssid{
+	String ssid;
+	String password;
 public:
-	char ssid[32] = {'\0'};
-	char password[32] = {'\0'};
-	Ssid(const char *,const char *);
+	Ssid() {
+	}
+	const String& getPassword() const;
+	void setPassword(const String& password);
+	const String& getSsid() const;
+	void setSsid(const String& ssid);
 };
 
 
