@@ -6,7 +6,8 @@
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266HTTPClient.h>
 
-Ssid SSIDlist[MAX_NUM_SSID];
+extern Ssid * SSIDlist;
+extern ESP8266WiFiMulti wifiMulti;
 
 String Command::GET(char** parameters) {
 	if(numOfParams < 2){
@@ -165,7 +166,7 @@ String Command::returnHTTPResponse(char ** parameters, uint8_t method) {
 	}
 
 	unsigned long start= millis();
-	if(WiFi.status() != WL_CONNECTED){
+	if(wifiMulti.run() != WL_CONNECTED){
 		Serial.println("Connecting ...");
 		while (
 				wifiMulti.run() != WL_CONNECTED // Wait for the Wi-Fi to connect: scan for Wi-Fi networks, and connect to the strongest of the networks above
@@ -173,6 +174,7 @@ String Command::returnHTTPResponse(char ** parameters, uint8_t method) {
 			if( millis() - start > 10000 ){
 				break;
 			}
+			Serial.print(".");
 			delay(500);
 		}
 	}

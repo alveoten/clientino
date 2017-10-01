@@ -16,6 +16,9 @@ const String& Ssid::getSsid() const {
 void Ssid::setSsid(const String& ssid) {
 	this->ssid = ssid;
 }
+
+Ssid SSIDlist[MAX_NUM_SSID];
+
 /*
  * Ssid.cpp
  *

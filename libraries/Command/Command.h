@@ -26,7 +26,6 @@ class Command{
 	char status = CS_TO_INITIALIZE;
 	String returnMessage;
 	char * command;
-	ESP8266WiFiMulti wifiMulti;
 
 	uint8_t numOfParams;
 	uint8_t * numberOfSSID;
@@ -96,6 +95,7 @@ public:
 	char getStatus() const;
 	const String& getReturnMessage() const;
 };
+
 
 
 #endif /* LIBRARIES_COMMAND_COMMAND_H_ */

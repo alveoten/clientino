@@ -9,6 +9,7 @@
 #define LIBRARIES_SSID_SSID_H_
 
 #include "WString.h"
+#include "../Command/Command.h"
 
 class Ssid{
 	String ssid;
@@ -21,6 +22,5 @@ public:
 	const String& getSsid() const;
 	void setSsid(const String& ssid);
 };
-
 
 #endif /* LIBRARIES_SSID_SSID_H_ */

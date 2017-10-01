@@ -3,6 +3,8 @@
 #include <ESP8266HTTPClient.h>
 #include "libraries/Command/Command.h"
 
+ESP8266WiFiMulti wifiMulti;
+
 String connectedTo = "";
 uint8_t numberOfSSID = 0;
 
